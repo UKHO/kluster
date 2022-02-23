@@ -37,6 +37,8 @@ from HSTB.shared import RegistryHelpers, path_to_supplementals
 from HSTB.kluster import kluster_variables
 from bathygrid.grid_variables import allowable_grid_root_names
 
+from HSTB.kluster import ukho
+
 # list of icons
 # https://joekuan.wordpress.com/2015/09/23/list-of-qt-icons/
 
@@ -199,6 +201,7 @@ class KlusterMain(QtWidgets.QMainWindow):
         self.points_view.points_selected.connect(self.show_points_in_explorer)
         self.points_view.points_cleaned.connect(self.set_pointsview_points_status)
         self.points_view.patch_test_sig.connect(self.manual_patch_test)
+        self.points_view.dl3d_sig.connect(self.run_dl3d)
 
         self.action_thread.started.connect(self._start_action_progress)
         self.action_thread.finished.connect(self._kluster_execute_action_results)
@@ -368,6 +371,9 @@ class KlusterMain(QtWidgets.QMainWindow):
         surface_action.triggered.connect(self._action_surface_generation)
         patch_action = QtWidgets.QAction('Patch Test', self)
         patch_action.triggered.connect(self._action_patch_test)
+
+        # dl3d_action = QtWidgets.QAction('DL3D', self)
+        # dl3d_action.triggered.connect(self._action_dl3d)
 
         basicplots_action = QtWidgets.QAction('Basic Plots', self)
         basicplots_action.triggered.connect(self._action_basicplots)
@@ -1036,6 +1042,10 @@ class KlusterMain(QtWidgets.QMainWindow):
             print(self.import_ppnav_thread.exceptiontxt)
         self.import_ppnav_thread.populate(None)
         self._stop_action_progress()
+
+    def run_dl3d(self, e):
+        ddf = ukho.convert_returned_points_to_ddf(e)
+        print(ddf)
 
     def manual_patch_test(self, e):
         """

@@ -2183,10 +2183,12 @@ class BatchRead(ZarrBackend):
             list of two element lists containing the prefixes needed for tx/rx offsets and angles
         """
 
-        if 'tx_r' in self.xyzrph:
+        if 'tx_r' in self.xyzrph and 'rx_r' in self.xyzrph:
             leverarms = [['tx', 'rx']]
-        elif 'tx_port_r' in self.xyzrph:
+        elif 'tx_port_r' in self.xyzrph and 'rx_port_r' in self.xyzrph:
             leverarms = [['tx_port', 'rx_port'], ['tx_stbd', 'rx_stbd']]
+        elif 'tx_r' in self.xyzrph and 'rx_port_r' in self.xyzrph:
+            leverarms = [['tx', 'rx_port'], ['tx', 'rx_stbd']]
         else:
             self.logger.error('Not supporting this sonartype yet.')
             raise NotImplementedError('Not supporting this sonartype yet.')

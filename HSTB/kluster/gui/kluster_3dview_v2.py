@@ -1360,6 +1360,7 @@ class ThreeDWidget(QtWidgets.QWidget):
     points_selected = Signal(object, object, object, object, object, object, object, object, object, object)
     points_cleaned = Signal(object)
     patch_test_sig = Signal(bool)
+    dl3d_sig = Signal(object)
 
     def __init__(self, parent=None, settings=None):
         super().__init__(parent)
@@ -1429,6 +1430,10 @@ class ThreeDWidget(QtWidgets.QWidget):
         self.patch_button = QtWidgets.QPushButton('Patch Test')
         self.patch_button.setToolTip('Run the Patch Test on the data currently in Points View.')
         self.second_opts_layout.addWidget(self.patch_button)
+        self.dl3d_button = QtWidgets.QPushButton('DL3D')
+        self.dl3d_button.setToolTip('Run DL3D on the data currently in Points View.')
+        self.second_opts_layout.addWidget(self.dl3d_button)
+
         self.second_opts_layout.addStretch()
 
         self.colorbar = ColorBar()
@@ -1472,9 +1477,11 @@ class ThreeDWidget(QtWidgets.QWidget):
         self.show_rejected.stateChanged.connect(self.refresh_settings)
         self.patch_button.clicked.connect(self._event_patch_test)
         self.hide_lines_btn.clicked.connect(self._event_hide_lines)
+        self.dl3d_button.clicked.connect(self._event_dl3d)
 
         self.is_3d = None
         self.patch_test_running = False
+        self.dl3d_running = False
         self.last_change_buffer = []
         self.text_controls = [['dimension', self.dimension], ['colorby', self.colorby],
                               ['viewdirection2d', self.viewdirection2d],
@@ -1572,6 +1579,10 @@ class ThreeDWidget(QtWidgets.QWidget):
         self.patch_test_running = True
         self.patch_test_sig.emit(True)
 
+    def _event_dl3d(self, e):
+        self.dl3d_running = True
+        self.dl3d_sig.emit(self.three_d_window.return_points())
+
     def _event_hide_lines(self):
         dlog = HideLinesDialog()
         dlog.initial_hide_lines = self.three_d_window.hide_lines
@@ -1586,6 +1597,7 @@ class ThreeDWidget(QtWidgets.QWidget):
 
     def _init_pointsview(self):
         self.patch_test_running = False
+        self.dl3d_running = False
         self.last_change_buffer = []
         self.three_d_window.hide_lines = []
         self.three_d_window.selected_points = None

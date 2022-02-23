@@ -13,7 +13,7 @@ from xarray import DataArray
 from fasteners import InterProcessLock
 from HSTB.kluster import kluster_variables
 
-
+# dask.config.set(scheduler='single-threaded')
 # we manually set the worker space (where spillover data goes during operations) here because I found some
 #  users were starting the python console in the Windows folder, or some other write protected area.  Default worker
 #  space is the current working directory.

@@ -1,4 +1,4 @@
-from HSTB.kluster.gui.backends._qt import QtGui, QtCore, QtWidgets, Signal
+ from HSTB.kluster.gui.backends._qt import QtGui, QtCore, QtWidgets, Signal
 import pyqtgraph.opengl as gl
 import numpy as np
 import sys

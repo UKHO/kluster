@@ -1,6 +1,6 @@
 import sys, os
 
-
+sys.path.append("/home/david/miniconda3/envs/kluster_test/share/qgis/python")
 qgis_enabled = True
 found_path = ''
 try:
